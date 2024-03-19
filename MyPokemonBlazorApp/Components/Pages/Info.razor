@@ -12,6 +12,32 @@ else
     <p>No Pokemon found for Id @Id</p>
 }
 
+<div class="card">
+        <div class="card-body bg-light">
+
+        @if (pokemon.Type == "Grass")
+        {
+            <span class="badge text-bg-success">Grass</span>
+        }
+        else if (pokemon.Type == "Fire")
+        {
+            <span class="badge text-bg-warning">Fire</span>
+        }
+        else if (pokemon.Type == "Water")
+        {
+            <span class="badge text-bg-info">Water</span>
+        }
+        else if (pokemon.Type == "Bug")
+        {
+            <span class="badge text-bg-warning-subtle">Bug</span>
+        }
+
+        
+
+        
+        </div>
+</div>
+
 @code {
     [Parameter]
     public int Id { get; set; }
