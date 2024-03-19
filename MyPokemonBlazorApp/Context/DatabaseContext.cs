@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyPokemonBlazorApp.Model;
 
+//Database
 namespace MyPokemonBlazorApp.Context
 {
     public class DatabaseContext : DbContext
