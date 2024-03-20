@@ -15,27 +15,84 @@ else
 <div class="card">
         <div class="card-body bg-light">
 
-        @if (pokemon.Type == "Grass")
+        @if (pokemon.Legendary == true)
         {
-            <span class="badge text-bg-success">Grass</span>
+            <span class="badge text-bg-warning">Legendary</span>
         }
-        else if (pokemon.Type == "Fire")
+        @switch (pokemon.Type)
         {
-            <span class="badge text-bg-warning">Fire</span>
+            case "Grass":
+                <span class="badge text-bg-success">Grass</span>
+                break;
+            case "Fire":
+                <span class="badge text-bg-warning">Fire</span>
+                break;
+            case "Water":
+                <span class="badge text-bg-info">Water</span>
+                break;
+            case "Bug":
+                <span class="badge text-bg-success">Bug</span>
+                break;
+            case "Normal":
+                <span class="badge text-bg-secondary">Normal</span>
+                break;
+            case "Poison":
+                <span class="badge text-bg-success">Poison</span>
+                break;
+            case "Electric":
+                <span class="badge text-bg-warning">Electric</span>
+                break;
+            case "Ground":
+                <span class="badge text-bg-danger">Ground</span>
+                break;
+            case "Fairy":
+                <span class="badge text-bg-light">Fairy</span>
+                break;
+            case "Psychic":
+                <span class="badge text-bg-primary">Psychic</span>
+                break;
+            case "Rock":
+                <span class="badge text-bg-danger">Rock</span>
+                break;
+            case "Ghost":
+                <span class="badge text-bg-light">Ghost</span>
+                break;
+            case "Fighting":
+                <span class="badge text-bg-danger">Fighting</span>
+                break;
+            case "Ice":
+                <span class="badge text-bg-info">Ice</span>
+                break;
+            case "Dragon":
+                <span class="badge text-bg-danger">Dragon</span>
+                break;
+            case "Dark":
+                <span class="badge text-bg-dark">Dark</span>
+                break;
+            case "Steel":
+                <span class="badge text-bg-secondary">Steel</span>
+                break;
+            default:
+                <span class="badge text-bg-primary">@pokemon.Type</span>
+                break;
+
         }
-        else if (pokemon.Type == "Water")
-        {
-            <span class="badge text-bg-info">Water</span>
-        }
-        else if (pokemon.Type == "Bug")
-        {
-            <span class="badge text-bg-warning-subtle">Bug</span>
-        }
+        <div class="col-md-9">
+            <div class="progress" role="progressbar" aria-label="Info example" aria-valuenow="@pokemon.Total" aria-valuemin="0" aria-valuemax="800">
+                <div class="progress-bar bg-info" style="width: @(pokemon.Total*100/800)%">@(pokemon.Total * 100 / 800)%</div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="progress" role="progressbar" aria-label="Info example" aria-valuenow="@pokemon.HP" aria-valuemin="0" aria-valuemax="255">
+                <div class="progress-bar bg-info" style="width: @(pokemon.HP*100/255)%">@(pokemon.HP * 100 / 255)%</div>
+            </div>
+        </div>
 
         
 
         
         </div>
+
 </div>
 
 @code {
