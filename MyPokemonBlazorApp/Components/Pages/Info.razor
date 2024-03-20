@@ -19,6 +19,7 @@ else
         {
             <span class="badge text-bg-warning">Legendary</span>
         }
+        <span class="badge text-bg-light">Gen @(pokemon.Generation)</span>
         @switch (pokemon.Type)
         {
             case "Grass":
@@ -77,16 +78,51 @@ else
                 break;
 
         }
-        <div class="col-md-9">
-            <div class="progress" role="progressbar" aria-label="Info example" aria-valuenow="@pokemon.Total" aria-valuemin="0" aria-valuemax="800">
-                <div class="progress-bar bg-info" style="width: @(pokemon.Total*100/800)%">@(pokemon.Total * 100 / 800)%</div>
+        
+        <div class="card-body bg-light">
+            <p>Total:</p>
+            <div class="col-md-9">
+                <div class="progress" role="progressbar" aria-label="Info example" aria-valuenow="@pokemon.Total" aria-valuemin="0" aria-valuemax="800">
+                    <div class="progress-bar bg-info" style="width: @(pokemon.Total*100/800)%">@(pokemon.Total)</div>
+                </div>
             </div>
         </div>
-        <div class="col-md-9">
-            <div class="progress" role="progressbar" aria-label="Info example" aria-valuenow="@pokemon.HP" aria-valuemin="0" aria-valuemax="255">
-                <div class="progress-bar bg-info" style="width: @(pokemon.HP*100/255)%">@(pokemon.HP * 100 / 255)%</div>
+        
+        <div class="card-body bg-light">
+            <p>HP:</p>
+            <div class="col-md-9">
+                <div class="progress" role="progressbar" aria-label="Success example" aria-valuenow="@pokemon.HP" aria-valuemin="0" aria-valuemax="255">
+                    <div class="progress-bar bg-success" style="width: @(pokemon.HP*100/255)%">@(pokemon.HP)</div>
+                </div>
             </div>
         </div>
+
+        <div class="card-body bg-light">
+            <p>Attack:</p>
+            <div class="col-md-9">
+                <div class="progress" role="progressbar" aria-label="Danger example" aria-valuenow="@pokemon.Attack" aria-valuemin="0" aria-valuemax="255">
+                    <div class="progress-bar bg-danger" style="width: @(pokemon.Attack*100/255)%">@(pokemon.Attack</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body bg-light">
+            <p>Defence:</p>
+            <div class="col-md-9">
+                <div class="progress" role="progressbar" aria-label="Info example" aria-valuenow="@pokemon.Defence" aria-valuemin="0" aria-valuemax="255">
+                    <div class="progress-bar" style="width: @(pokemon.Defence*100/255)%">@(pokemon.Defence)</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <p>Speed:</p>
+            <div class="col-md-9">
+                <div class="progress" role="progressbar" aria-label="Warning example" aria-valuenow="@pokemon.Speed" aria-valuemin="0" aria-valuemax="255">
+                    <div class="progress-bar bg-warning" style="width: @(pokemon.Speed*100/255)%">@(pokemon.Speed)</div>
+                </div>
+            </div>
+        </div>
+        
 
         
 
