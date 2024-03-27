@@ -1,0 +1,167 @@
+﻿@page "/Trainers"
+@rendermode InteractiveServer
+@inject DatabaseContext DbContext
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>Trainers</PageTitle>
+
+
+<div class="row g-0">
+    <div class="col-md-12">
+        <button class="btn btn-primary float-end" @onclick="ShouldAddTrainers">
+            Add Trainers
+        </button>
+    </div>
+</div>
+
+@if (showForm)
+{
+<div class="card">
+    <div class="card-body bg-light">
+        <h4 class="card-title">
+            @(model.Id == 0 ? "Add Trainer" : "Edit Trainer")
+        </h4>
+        <EditForm OnValidSubmit="Submit" EditContext="editContext">
+            <DataAnnotationsValidator />
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <label for="name" class="form-label">Name</label>
+                    <InputText class="form-control" placeholder="Name" @bind-Value="model.Name" />
+                </div>
+                <div class="col-md-3">
+                    <label for="Companion" class="form-label">Companion</label>
+                    <InputSelect class="form-select" placeholder="Companion" @bind-Value="companionId">
+                        @foreach(var pokemon in pokemons)
+                            {
+                                <option value="@pokemon.Id">@pokemon.Name</option>
+                            }
+                        </InputSelect>
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary float-end">@(model.Id == 0 ? "Add Trainer" : "Edit Trainer")</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Companion</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trainer in trainers)
+        {
+            <tr>
+                <td>@trainer.Id</td>
+                <td>@trainer.Name</td>
+                <td>@trainer.Companion.Name</td>
+                <td>
+                    <button class="btn btn-success" @onclick="() => Edit(trainer)">Edit</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" @onclick="() => Delete(trainer)">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private Trainer trainer;
+    private List<Trainer>? trainers;
+    private List<Pokemon>? pokemons;
+    private bool showForm;
+    private Trainer model;
+    private EditContext editContext;
+    private int companionId;
+    [Parameter]
+    public EventCallback<bool> OnSaved { get; set; }
+
+    [Parameter]
+    public EventCallback<Trainer> OnDeleteClicked { get; set; }
+
+
+    private void ShouldAddTrainers()
+    {
+        model = new Trainer();
+        editContext = new EditContext(model);
+        showForm = true;
+    }
+
+    private void Edit(Trainer trainer)
+    {
+        model = trainer;
+        editContext = new EditContext(model);
+        showForm = true;
+    }
+
+    private async Task Submit()
+    {
+        model.Companion = pokemons.Single(p => p.Id == companionId);
+
+        if (model.Id == 0)
+            DbContext.Trainers.Add(model);
+        else
+            DbContext.Trainers.Update(model);
+
+
+        await DbContext.SaveChangesAsync();
+        await OnSaved.InvokeAsync();
+        await Refresh();
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    private async Task Refresh()
+    {
+        model = new Trainer();
+        editContext = new EditContext(model);
+        trainers = await DbContext.Trainers.ToListAsync();
+        pokemons = await DbContext.Pokemons.OrderBy(p => p.Name).ToListAsync();
+    }
+
+    private async Task Delete(Trainer trainer)
+    {
+        DbContext.Trainers.Remove(trainer);
+        await DbContext.SaveChangesAsync();
+        await Refresh();
+    }
+
+    [Parameter]
+    public Trainer Model
+    {
+        get
+        {
+            return model;
+        }
+        set
+        {
+            model = value ?? new Trainer();
+            if (model.Companion is null)
+                model.Companion = new Pokemon();
+            companionId = model.Companion.Id;
+            editContext = new(model);
+        }
+    }
+    
+
+    
+    
+}
+
