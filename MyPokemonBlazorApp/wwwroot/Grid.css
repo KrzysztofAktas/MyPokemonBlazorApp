@@ -1,0 +1,60 @@
+﻿﻿.quickgrid[theme=pokemon] tbody tr {
+    height: 40px;
+    vertical-align: middle;
+}
+
+.quickgrid[theme=pokemon] .col-title-text {
+    font-weight: bold;
+}
+
+.quickgrid[theme=pokemon] .col-sort-desc .sort-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5253 5.49475L10.5206 7.49475L15.0782 7.50541L5.47473 17.0896L6.88752 18.5052L16.5173 8.89479L16.5065 13.5088L18.5065 13.5134L18.5253 5.51345L10.5253 5.49475Z" fill="currentColor" /></svg>');
+}
+
+.quickgrid[theme=pokemon] .col-sort-asc .sort-indicator {
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5253 5.49475L10.5206 7.49475L15.0782 7.50541L5.47473 17.0896L6.88752 18.5052L16.5173 8.89479L16.5065 13.5088L18.5065 13.5134L18.5253 5.51345L10.5253 5.49475Z" fill="currentColor" /></svg>');
+    transform: scaleY(-1);
+}
+
+.paginator {
+    border-top: 0px !important;
+    padding: 0 !important;
+}
+
+/*.quickgrid[theme=pokemon] th .col-options-button {*/
+    /*border: none;
+    padding: 0;*/ /* So that even if the text on the button is wide, it gets properly centered */
+    /*width: 1rem;
+    align-self: stretch;*/
+    /*background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" > <path d="M15.8787 4.87866H3.87872V6.87866H15.8787V4.87866Z" fill="currentColor" /> <path d="M15.8787 8.87866H3.87872V10.8787H15.8787V8.87866Z" fill="currentColor" /> <path d="M3.87872 12.8787H11.8787V14.8787H3.87872V12.8787Z" fill="currentColor" /> <path fill-rule="evenodd" clip-rule="evenodd" d="M13.7574 12.7573C12.5858 13.9289 12.5858 15.8284 13.7574 17C14.681 17.9236 16.0571 18.1191 17.1722 17.5864L18.7071 19.1213L20.1213 17.7071L18.5864 16.1722C19.1191 15.057 18.9236 13.681 18 12.7573C16.8284 11.5858 14.9289 11.5858 13.7574 12.7573ZM15.1716 15.5858C15.5621 15.9763 16.1953 15.9763 16.5858 15.5858C16.9763 15.1952 16.9763 14.5621 16.5858 14.1716C16.1953 13.781 15.5621 13.781 15.1716 14.1716C14.7811 14.5621 14.7811 15.1952 15.1716 15.5858Z" fill="currentColor" /> </svg>') center center / 1rem no-repeat;*/
+    /*background: url('data:image/svg+xml;utf8,<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"> <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/> </svg>') center center / 1rem no-repeat;
+}*/
+
+input[type=search] {
+    width: 20rem;
+    padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+    color: rgb(17 24 39);
+    background-color: rgb(249 250 251);
+    border: 1px solid rgb(209 213 219);
+    border-radius: 0.5rem;
+    outline-offset: 1px;
+}
+
+    input[type=search]:focus {
+        border-color: rgb(59 130 246);
+        outline-color: rgb(59 130 246);
+    }
+
+.search-box {
+    position: relative;
+}
+
+    .search-box:before {
+        content: ' ';
+        width: 1.25rem;
+        height: 1.25rem;
+        position: absolute;
+        left: .75rem;
+        top: calc(50% - 1.25rem/2);
+        background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='rgb(107 114 128)' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' b-nrli8fdfc6=''%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' b-nrli8fdfc6=''%3E%3C/path%3E%3C/svg%3E");
+    }

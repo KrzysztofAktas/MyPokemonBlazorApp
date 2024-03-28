@@ -1,4 +1,5 @@
-﻿@rendermode InteractiveServer
+﻿@using Microsoft.AspNetCore.Components.QuickGrid
+@rendermode InteractiveServer
 @inject DatabaseContext DbContext
 @inject NavigationManager NavigationManager
 
@@ -75,60 +76,94 @@
 
 }
 
+@if (Pokemons == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div>
+        <QuickGrid Theme="pokemon" Class="table" Items="@FilteredPokemon" Pagination="@pagination">
+            <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Name)" Sortable="true">
+                <ColumnOptions>
+                    <div class="search-box">
+                        <input type="search" autofocus @bind="nameSearch" @bind:event="oninput" placeholder="Pokemon name..." />
+                    </div>
+                </ColumnOptions>
+            </PropertyColumn>
+            <PropertyColumn Property="@(p => p.Total)" Sortable="true" />
+            <PropertyColumn Property="@(p => p.HP)" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Attack)" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Defence)" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Speed)" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Generation)" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Legendary)" Sortable="true" />
+            <TemplateColumn Title="Edit">
+                <button class="btn btn-success" @onclick="() => Edit(context)">Edit</button>
+            </TemplateColumn>
+            <TemplateColumn Title="Delete">
+                <button class="btn btn-danger" @onclick="() => Delete(context)">Delete</button>
+            </TemplateColumn>
+            <TemplateColumn Title="Info">
+                <button class="btn btn-primary" @onclick="() => ShowInfo(context)">Info</button>
+            </TemplateColumn>
+        </QuickGrid>
+        <Paginator State="@pagination" />
+    </div>
+}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Type</th>
-            <th scope="col">Total</th>
-            <th scope="col">HP</th>
-            <th scope="col">Attack</th>
-            <th scope="col">Defence</th>
-            <th scope="col">Speed</th>
-            <th scope="col">Generation</th>
-            <th scope="col">Legendary</th>
-            <th scope="col">Edit</th>
-            <th scope="col">Delete</th>
-            <th scope="col">Info</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var pokemon in pokemons)
-        {
-            <tr>
-                <td>@pokemon.Id</td>
-                <td>@pokemon.Name</td>
-                <td>@pokemon.Type</td>
-                <td>@pokemon.Total</td>
-                <td>@pokemon.HP</td>
-                <td>@pokemon.Attack</td>
-                <td>@pokemon.Defence</td>
-                <td>@pokemon.Speed</td>
-                <td>@pokemon.Generation</td>
-                <td>@pokemon.Legendary</td>
-                <td>
-                    <button class="btn btn-success" @onclick="() => Edit(pokemon)">Edit</button>
-                </td>
-                <td>
-                    <button class="btn btn-danger" @onclick="() => Delete(pokemon)">Delete</button>
-                </td>
-                <td>
-                    <button class="btn btn-primary" @onclick="() => Info(pokemon)">Info</button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
 
 @code {
     private List<Pokemon>? pokemons;
     private EditContext editContext;
     private Pokemon model;
     private bool showForm;
+    private PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    private string nameSearch;
 
-    private void Info(Pokemon pokemon)
+    [Parameter]
+    public EventCallback<bool> OnSaved { get; set; }
+
+    [Parameter]
+    public EventCallback<Pokemon> OnEditClicked { get; set; }
+
+    [Parameter]
+    public EventCallback<Pokemon> OnDeleteClicked { get; set; }
+
+    [Parameter]
+    public IQueryable<Pokemon>? Pokemons { get; set; }
+
+    [Parameter]
+    public Pokemon Model
+    {
+        get
+        {
+            return model;
+        }
+        set
+        {
+            model = value ?? new Pokemon();
+            editContext = new(model);
+        }
+    }
+
+    private IQueryable<Pokemon>? FilteredPokemon
+    {
+        get
+        {
+            IQueryable<Pokemon>? filtered = Pokemons;
+            if (!string.IsNullOrEmpty(nameSearch))
+            {
+                filtered = filtered?.Where(c => c.Name.Contains(nameSearch, StringComparison.CurrentCultureIgnoreCase));
+            }
+            return filtered;
+
+        }
+    }
+
+    private void ShowInfo(Pokemon pokemon)
     {
         NavigationManager.NavigateTo($"/Info/{pokemon.Id}");
     }
@@ -142,9 +177,7 @@
 
     private void Edit(Pokemon pokemon)
     {
-        model = pokemon;
-        editContext = new EditContext(model);
-        showForm = true;
+        OnEditClicked.InvokeAsync(pokemon);
     }
 
     private async Task Submit()
@@ -156,25 +189,24 @@
 
 
         await DbContext.SaveChangesAsync();
-        await Refresh();
+        await OnSaved.InvokeAsync();
 
     }
 
     protected override async Task OnInitializedAsync()
     {
-        await Refresh();
-    }
-    private async Task Refresh()
-    {
-        model = new Pokemon();
-        editContext = new EditContext(model);
-        pokemons = await DbContext.Pokemons.ToListAsync();
+        await GetPokemon();
     }
 
     private async Task Delete(Pokemon pokemon)
     {
         DbContext.Pokemons.Remove(pokemon);
         await DbContext.SaveChangesAsync();
-        await Refresh();
+        await OnDeleteClicked.InvokeAsync(pokemon);
+    }
+
+    private async Task GetPokemon()
+    {
+        Pokemons = (await DbContext.Pokemons.ToListAsync()).AsQueryable();
     }
 }
